@@ -1,6 +1,5 @@
 <template>
   <div class="todos">
-    {{ fetchTodos() }}
     <button class="add-todo" v-on:click="toggleTodoForm()">
       <span v-if="this.showForm">Cancel</span>
       <span v-else>Add To-Do</span>
@@ -34,26 +33,27 @@ export default {
   data () {
     return {
       user: auth.user,
-      todos: auth.user.todos,
+      todos: this.fetchTodos(auth.user),
       fetchedTodos: false,
       showForm: false
     }
   },
   methods: {
-    fetchTodos: function () {
-      if (!this.fetchedTodos) {
-        this.$http.get(TODOS_ENDPOINT + '?userId=' + this.user.id).then((response) => {
-          if (response.body) {
-            this.todos = response.body
-            this.fetchedTodos = true
-          } else {
-            this.todos = []
-          }
-        })
-      }
-    },
     toggleTodoForm: function () {
       this.showForm = !this.showForm
+    },
+    fetchTodos: function (user) {
+      this.$http.get(TODOS_ENDPOINT + '?userId=' + user.id).then((response) => {
+        if (response.body) {
+          this.todos = response.body
+          this.fetchedTodos = true
+        } else {
+          this.todos = []
+        }
+      })
+      .catch((error) => {
+        console.log(error)
+      })
     }
   },
   updated: function () {
