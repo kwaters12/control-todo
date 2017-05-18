@@ -1,6 +1,7 @@
 <template>
   <div id="app">
     <header>
+      <h2>Testing Jenkins</h2>
       <img src="./assets/logo.svg">
       <h1>Control Your Todos</h1>
       <span class="greeting" v-show="user.name">
